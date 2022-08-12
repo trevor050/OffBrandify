@@ -19,7 +19,6 @@ language_code = "en-us"
 synonyms = []
 antonyms = []
 eck = 1
-w = 0
 #get synonyms of a word and print them
 def get_oxford_synonyms(word_id):
     global endpoint
@@ -58,13 +57,7 @@ def get_input():
     return split_game_name
 
 #get synonyms of each word in the array, pick a random one, return only one synonym for each word in the array
-def get_synonyms():
-    global synonyms
-    global split_game_name
-    global eck
-    global w
-    w += 1
-        
+def get_synonyms():     
     print("Off-Brandifying...")
     #wait 1.2 seconds to make it look like the program is doing something
     time.sleep(1.2)
@@ -82,7 +75,6 @@ def get_synonyms():
              for word in synonyms_array:
                 if len(word) == 1 and word != "a" and word.isalpha() == True:
                     synonyms_array.remove(word)
-        
         if len(synonyms_array) == 0:
             synonyms_array.append(word)
         #print every word in the array and its lenth
@@ -96,10 +88,10 @@ def get_synonyms():
                 #if have tried 5 times print loading message
                 if i == 1:
                     print("Still Loading...")
-                    time.sleep(0.4)
+                    time.sleep(0.3)
                 if i == 4:
                     print("This is a tricky one...")
-                    time.sleep(1)
+                    time.sleep(0.8)
                 #if reached 10 tries and still the same word, print error message
                 if i == 9:
                     print("We Couldn't find a off-brandify for " + word)
@@ -111,8 +103,77 @@ def get_synonyms():
         if len(random_synonym) == 1 and random_synonym.isalpha() == True and random_synonym != "a":
             synonyms.remove(random_synonym)
             synonyms.append(word)
-
-
+        #a list of celebrities.
+    for i in range(len(synonyms)):
+        synonyms[i] = synonyms[i].title()
+    Celeb_Prefixes = ["Will Ferrell", "Joe Biden", "Dwayne Johnson", "Michael Jordan", "Abe Lincoln", "Pope Francis", "Joseph Stalin", "Pablo Picasso", "Ellen DeGeneres"]
+    Celeb_Suffixes_2 = ["Jr", "II", "III", "IV", "V"]
+    Celeb_Prefixes_Common = ["'s", " Presents", "'s All New"]
+    Celeb_Prefixes_Rare = ["Foundation of Amrerica Presents:", "Inc. Presents:", "Assocation Presents:"]
+    suffixs = ["Simulator", "Battle Royal", "Super", "Mega", "Ultimate"]
+    Suffixs2 = [ "The Game", "The Book", "The Movie", "The Netflix Adaptation", "Playing Cards", "The Broadway Musical"]
+    Gamesuffixs = ["Wii U Edition", "Xbox 360 Edition", "Gamecube Edition", "Atari Edition", "Edcuation Edition"]
+    gamesuffixs = False
+    #a 50% chance of getting everything except celeb prefix rare, the chance for celeb prefix common is 75%
+    celeb_prefix = False
+    celeb_prefix_2 = False
+    celeb_prefixs_common = False
+    celeb_prefix_rare = False
+    suffix = False
+    suffixs2_bool = False
+    isgame = False
+    if random.randint(1,2) == 1:
+        celeb_prefix = True
+        if random.randint(1,2) == 1:
+            celeb_prefix_2 = True
+            #one in 3 chance of getting celeb prefix rare
+        if random.randint(1,3) == 1:
+            celeb_prefix_rare = True
+        else:
+            celeb_prefixs_common = True
+    if random.randint(1,2) == 1:
+        suffix = True
+    if random.randint(1,2) == 1:
+            suffixs2_bool = True
+                
+    if celeb_prefix_rare == True:
+        #pick random prefix from the celeb prefix array
+        celeb_prefix = random.choice(Celeb_Prefixes)
+        if celeb_prefix_2 == True:
+            celeb_prefix = celeb_prefix + " " + random.choice(Celeb_Suffixes_2)
+        random_prefix = random.choice(Celeb_Prefixes_Rare)
+        random_prefix2 = celeb_prefix + " " + random_prefix
+        synonyms.insert(0, random_prefix2)
+    elif celeb_prefixs_common == True:
+        #pick random prefix from the celeb prefix array
+        celeb_prefix = random.choice(Celeb_Prefixes)
+        if celeb_prefix_2 == True:
+            celeb_prefix = celeb_prefix + " " +  random.choice(Celeb_Suffixes_2)
+        random_prefix = random.choice(Celeb_Prefixes_Common)
+        random_prefix2 = celeb_prefix + random_prefix
+        synonyms.insert(0, random_prefix2)    
+    if suffix == True:
+        #pick random suffix from the suffix array
+        if random.randint(1,4) == 1:
+            random_suffix = random.choice(suffixs)
+            random_suffix2 = random_suffix + " " + random.choice(suffixs)
+        else:
+            random_suffix = random.choice(suffixs)
+            random_suffix2 = random_suffix
+        synonyms.append(random_suffix2)
+    if suffixs2_bool == True:
+        #pick random suffix from the suffix array
+        random_suffix = random.choice(Suffixs2)
+        if random_suffix == Suffixs2[0]:
+            isgame = True
+            game_suffix = random.choice(Gamesuffixs)
+            synonyms.append(random_suffix + " " + game_suffix)
+        else:
+            isgame = False
+            random_suffix2 = random_suffix + " "
+            synonyms.append(random_suffix2)  
+                
+    #make the first letter of every word upper case
     return synonyms
 
 #turn array into a string and return it
@@ -141,7 +202,7 @@ def main():
             print("Thanks for using the off-brandifier!")
             exit()
         else:
-            print("Invalid input")
+            print("Invalid input, please enter Y or N")
             playagain()
     playagain()
         
@@ -149,10 +210,3 @@ def main():
 if __name__ == "__main__":
     main()
     #print(synonyms)
-
-
-
-
-
-
-
