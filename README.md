@@ -16,7 +16,7 @@ Go to https://developer.oxforddictionaries.com/, and get a free api key.
 
 
 ### Alpha Release 1.0 - Aug 10 2022
-- Added Oxford Thesaurus API\n
+- Added Oxford Thesaurus API
 - Remove NLTK API due to lack of results and unrelated words being given
 - Sometimes the algorthm accidentally chooses the orginal word, this is now prevented
 - Speed up loading time through optimization
