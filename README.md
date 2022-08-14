@@ -6,7 +6,7 @@ Go to https://developer.oxforddictionaries.com/, and get a free api key.
 
 ## Version History
 
-### Alpha Relase 2.0 - Aug 12 2022
+### Alpha Relase 2.0 [Front End Update] - Aug 12 2022
 - In Reference to "Tom Clancy's Rainbow Six Siege" your off-brandifys can now be backed by celebrites there children, grandchildren, great grandchildren, there organizations, and more!
 - Added Suffix that go on the end such as Simulator, Battle Royal, Ultimate and more
 - Added Types like "____ the game" or "_____ the netflix adaptation, and more!
