@@ -5,7 +5,7 @@ A Simple Python Script to make funny off-branded versions of any text input
 When opening application user is guided on where to get API key and where to enter it. If 1000 calls limit is reached, make a new api with a different email, you can use a fake email.
 ## Version History
 
-### Beta Release 4.0 [Backend Update] Sep 4 2023:
+### Beta Release 4.0 [Backend Update] - Sep 4 2023
   - New API!
   - Scraps old API system instead using a brand new API!
   - No api key is required!
