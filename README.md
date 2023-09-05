@@ -5,6 +5,15 @@ A Simple Python Script to make funny off-branded versions of any text input
 When opening application user is guided on where to get API key and where to enter it. If 1000 calls limit is reached, make a new api with a different email, you can use a fake email.
 ## Version History
 
+### Beta Release 4.0 [Backend Update]:
+  - New API!
+  - Scraps old API system instead using a brand new API!
+  - No api key is required!
+  - API prints much better outputs!
+  - Added some new terms but not a lot
+  - A lot faster
+  - NinjaAPI is now used
+
 ### Alpha Release 3.0 [Full Stack Update] - Aug 14 2022
 - Added New Celebs
 - Reworked All Celeb Suffixs (Jr, The V, Grandson, Etc)
