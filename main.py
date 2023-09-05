@@ -1,21 +1,16 @@
 #get an input from the user then return an off brand version of the sentence. do this by replacing each word with a synonym of it. 
 print("Starting...")
+import json
+import os
+import random
+import time
+import webbrowser
 from glob import glob
 from http.client import responses
 from multiprocessing.connection import wait
-from tkinter import W
-from turtle import reset
 import requests
-import json
-import requests
-import nltk
 from nltk.corpus import wordnet
-import random
-import time
-from unittest import result
-import demjson
-import webbrowser
-import os
+
 current_year = time.strftime("%Y")
 app_id = "Your App ID"
 app_key = "Your App Key"
@@ -66,7 +61,6 @@ def check_word_in_json_file(word):
         return False
     else:
         print("Catastrophic error saving error.")
-        #funny number lol
         print("Error Info: " + str(jsonfileexists2) + " " + str(word) + " " + str(unoff_brandable_words))
         print("Please Submit this to the github issue tracker. At https://github.com/trevor050/OffBrandify/issues")
         openlink = input("Do you want to open the issue tracker? (Y/N) ")
@@ -121,135 +115,23 @@ def load_key():
         print("Saved key not found.")
         return False
 
-def get_oxford_synonyms(word_id):
-    global endpoint
-    global app_id
-    global app_key
-    global loaded_key
-    global wrongkey
-    global common_words
-    # or if word is in the unoff_brandable_words.json file
-    if word_id.lower() in common_words or check_word_in_json_file(word_id.lower()):
-        print("Skipped " + word_id)
-        synonyms_list = []
-        synonyms_list.append(word_id)
-        return synonyms_list
-    if loaded_key == False or wrongkey == False:
-        print("Attempting to load api key...")
-        time.sleep(1)
-        valid_key = load_key()
-        if valid_key == True:
-            loaded_key = True
-        if valid_key == False:
-            print("No key loaded.")
-    endpoint = "thesaurus"
-    fields = 'synonyms'
-    strictMatch = 'false'
-    url = "https://od-api.oxforddictionaries.com/api/v2/"+ endpoint+"/"+language_code+"/"+word_id  + '?fields=' + fields + '&strictMatch=' + strictMatch;
-    headers = {"app_id": app_id, "app_key": app_key,"word_id":word_id, 'units': 'imperial'}
-    response = requests.get(url, headers=headers)
-    if response.status_code == 403:
-        havekey = input("Do you have an API key? (Y/N) ")
-        havekey.lower()
-        if havekey == "y":
-            newappid = input("Please enter your app id: ")
-            newappkey = input("Please enter your app key: ")
-            print("Loading new app id and key...")
-            time.sleep(1.6)
-            app_id = newappid
-            app_key = newappkey
-            print("New app id and key loaded.")
-            print("Checking if the key is valid...")
-            time.sleep(1.6)
-            url = "https://od-api.oxforddictionaries.com/api/v2/"+ endpoint+"/"+language_code+"/"+word_id  + '?fields=' + fields + '&strictMatch=' + strictMatch;
-            headers = {"app_id": app_id, "app_key": app_key,"word_id":word_id, 'units': 'imperial'}
-            response = requests.get(url, headers=headers)
-            if response.status_code == 403:
-                print("Error: The key is invalid. Please try again.")
-                get_oxford_synonyms(word_id)
-                wrongkey = True
-                return get_oxford_synonyms(word_id)
-            elif response.status_code == 200:
-                print("Key is valid!")
-                time.sleep(0.3)
-                print("Saving key...")
-                time.sleep(0.2)
-                save_key_to_json(app_id, app_key)
-                loaded_key = True
-            elif response.status_code == 404:
-                lookup = response.json()
-                if lookup['error'] == "No entries were found for a given word":
-                    print("Key is valid!")
-                    print("Saving key...")
-                    save_key_to_json(app_id, app_key)
-                    return "Error"
-                else:
-                    print("Error: Unknown error. Error Code: api-err" + str(response.status_code))
-                    print("Error info: " + str(response.text))
-                    print("Please Submit this to the github issue tracker. At https://github.com/trevor050/OffBrandify/issues")
-                    openlink = input("Do you want to open the issue tracker? (Y/N) ")
-                    openlink.lower()
-                    if openlink == "y":
-                        webbrowser.open("https://github.com/trevor050/OffBrandify/issues")
-                    exit()
-            else:
-                print("Error: Unknown error. Error Code: api-err" + str(response.status_code))
-                print("Error info: " + str(response.text))
-                print("Please Submit this to the github issue tracker. At https://github.com/trevor050/OffBrandify/issues")
-                openlink = input("Do you want to open the issue tracker? (Y/N) ")
-                openlink.lower()
-                if openlink == "y":
-                    webbrowser.open("https://github.com/trevor050/OffBrandify/issues")
-                exit() 
-                exit()
-        elif havekey == "n":
-            print("You need to get a free api key from Oxford Developer Portal to use this program.")
-            print("Opening Oxford Developer Portal...")
-            time.sleep(1.6)
-            #open https://developer.oxforddictionaries.com/
-            webbrowser.open("https://developer.oxforddictionaries.com/")
-            wrongkey = True
-            return get_oxford_synonyms(word_id)
-        else:
-            print("invalid input, please enter Y or N")
-            return get_oxford_synonyms(word_id)
-    if response.status_code == 429:
+
+
+def get_ninja_synonyms(word_id):
+    api_url = 'https://api.api-ninjas.com/v1/thesaurus?word=' + str(word_id)
+    headers = {
+       #fake headers to look like a real browser
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5)'
+                        'AppleWebKit/537.36 (KHTML, like Gecko) Cafari/537.36'
+    }
+    response = requests.get(api_url, headers=headers)
+    if response.status_code == 200:
+        parsed_data = json.loads(response.text)
+        synonyms = parsed_data.get('synonyms', 'No synonyms found')
+        return synonyms
+    else:
+        print("Error: " + str(response.status_code))
         print(response.text)
-        print("Error: You have exceeded the maximum number of requests")
-        print("Please wait a few minutes and try again.")
-        resetkey = input("Would you like to get a new api key? (Y/N) ")
-        resetkey.lower()
-        if resetkey == "y":
-            app_id = "Your App ID"
-            app_key = "Your App Key"
-            loaded_key = True
-            
-            return get_oxford_synonyms(word_id)
-        else:
-            print("Waiting until word limit is reset...")
-            time.sleep(120)
-        return get_oxford_synonyms(word_id)
-    lookup = response.json()
-    try:
-        errorcheck = lookup['error']
-        if errorcheck == "No entries were found for a given word":
-            return "Error"
-        
-    except:
-        ...
-    #check if word is not a letter in the alphabet
-    if word_id.isalpha() == False:
-        return "Error"
-    #check if there is an error given
-    
-        #return "No Synonyms Found"
-    synonyms = lookup['results'][0]['lexicalEntries'][0]['entries'][0]['senses'][0]['synonyms']
-    synonyms_list = []
-    for synonym in range(len(synonyms)):
-        synonyms_list.append(synonyms[synonym]['text'])
-    return synonyms_list
-
-
 
 def get_input():
     global split_game_name
@@ -266,12 +148,12 @@ def get_synonyms():
         oneword = False
         #make a new array to hold the synonyms of the word
         synonyms_array = []
-        oxford_synonyms = get_oxford_synonyms(word)
-        if oxford_synonyms == "Error":
+        ninja_synonyms = get_ninja_synonyms(word)
+        if ninja_synonyms == None:
             ...
         else:
-            synonyms_array.extend(oxford_synonyms)
-
+            synonyms_array.extend(ninja_synonyms)
+            
         #remove all 1 character words from the array 
         for word in synonyms_array:
              for word in synonyms_array:
@@ -383,15 +265,14 @@ def get_synonyms():
     #make the first letter of every word upper case
     return synonyms
 
+
+
 #turn array into a string and return it
 def get_synonyms_string():
     global synonyms
     global split_game_name
     synonyms_string = " ".join(synonyms)
     return synonyms_string
-
-#make function that does all of these, allow user to input a sentence, get synonyms, get string, print string. allow them to do it as many times as they want.
-def main():
     get_input()
     get_synonyms()
     if eck == 1:
@@ -417,5 +298,3 @@ def main():
 if __name__ == "__main__":
     main()
     #print(synonyms)
-
-    #funny number lol
